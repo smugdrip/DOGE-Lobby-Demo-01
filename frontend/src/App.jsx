@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import Navbar from "./Navbar.jsx"
 import './App.css'
 
 function App() {
@@ -21,17 +22,7 @@ function App() {
     fetchData()
   }, [])
 
-  return (
-
-    <>
-      <div>
-        <p>
-          {loading ? 'Loading...' : data.message }
-
-        </p>
-      </div>
-    </>
-  )
+  return <Navbar />
 }
 
 export default App
