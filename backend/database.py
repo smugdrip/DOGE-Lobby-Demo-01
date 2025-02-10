@@ -127,20 +127,22 @@ class Image(Model):
 
 
 
-db.connect()
-db.create_tables([User, UserHasFriend, Notification, Idea, UserSupportsIdea, UserSavesIdea, UserQuestionsIdea, 
+
+def setupDB():
+    db.connect()
+    db.create_tables([User, UserHasFriend, Notification, Idea, UserSupportsIdea, UserSavesIdea, UserQuestionsIdea, 
                 Comment, Category, IdeaHasCategory, Image])
 
-
-
+setupDB()
 
 def populateDB():
-    alex = User.create(username="aklevans", firstName = "alex", lastName = "Klevans", email = "alex@email.com")
-    varun = User.create(username="vsiyer", firstName = "varun", lastName = "iyer", email = "varun@email.com")
-    UserHasFriend.create(user1=alex, user2=varun)
-
-# populateDB()
-
+    print("populating db")
+    try:
+        alex = User.create(username="aklevans", firstName = "alex", lastName = "Klevans", email = "alex@email.com")
+        varun = User.create(username="vsiyer", firstName = "varun", lastName = "iyer", email = "varun@email.com")
+    except:
+        print("db already populated")
+populateDB()
 
 
 def getUserByUsername(username):
@@ -151,4 +153,5 @@ def getUserFriends(user):
 
 def addUserFriend(user1, user2):
     return
+
 
