@@ -1,36 +1,19 @@
-import { useState, useEffect } from 'react'
-import './App.css'
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+import { theme } from './styles/theme'
+import Home from "./pages/Home/Home"
+import Login from "./pages/Login/Login"
 
 function App() {
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://localhost:8000')
-        const result = await response.json()
-        setData(result)
-      } catch (error) {
-        console.error('Error fetching data:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [])
-
   return (
-
-    <>
-      <div>
-        <p>
-          {loading ? 'Loading...' : data.message }
-
-        </p>
-      </div>
-    </>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   )
 }
 
