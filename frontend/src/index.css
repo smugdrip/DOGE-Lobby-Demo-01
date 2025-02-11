@@ -44,7 +44,6 @@ h1 {
   background-color: #333;
   color: white;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   gap: 2rem;
   padding: 0 1rem;
@@ -53,6 +52,7 @@ h1 {
 .nav a {
   color: inherit;
   text-decoration: none;
+  display: flex;
 }
 
 .nav ul {
@@ -67,9 +67,17 @@ h1 {
   color: white;
 }
 
+.nav .title-container {
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+}
+
 .nav .freeflow-title {
   font-size: 3rem;
   color: #468B97;
+  display: flex;
+  align-items: center;
 }
 
 button {
