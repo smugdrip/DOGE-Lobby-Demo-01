@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import Navbar from "./Navbar.jsx"
+import Search from "./search.jsx"
 import './App.css'
 
 function App() {
@@ -22,7 +24,15 @@ function App() {
     fetchData()
   }, [])
 
-  return <Navbar />
+  return(
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/search" element={<Search />} />
+      </Routes>
+    </Router>
+  )
+
 }
 
 export default App

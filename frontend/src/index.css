@@ -46,7 +46,14 @@ h1 {
   display: flex;
   align-items: center;
   gap: 2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   padding: 0 1rem;
+  width: 95vw;
+  height: 80px;
+  position: fixed;
+  top: 1vw;
+  left: 2.5vw;
+  border-radius: 20px 20px 20px 20px;
 }
 
 .nav a {
@@ -68,6 +75,9 @@ h1 {
 }
 
 .nav .title-container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   justify-content: center;
   flex-grow: 1;
