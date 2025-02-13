@@ -35,13 +35,8 @@ export default function Navbar() {
                     </g>
                 </svg>
             </NavLink>
-            <NavLink to="profile" className={({ isActive }) => isActive ? "nav-icon active" : "nav-icon"}>
-                <svg width="51" height="51" viewBox="0 0 51 51" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <g id="7acdbfef">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M25.5 51C39.5833 51 51 39.5833 51 25.5C51 11.4167 39.5833 0 25.5 0C11.4167 0 0 11.4167 0 25.5C0 39.5833 11.4167 51 25.5 51ZM25.3229 47.8125C37.7436 47.8125 47.8125 37.7436 47.8125 25.3229C47.8125 12.9023 37.7436 2.83333 25.3229 2.83333C12.9023 2.83333 2.83333 12.9023 2.83333 25.3229C2.83333 37.7436 12.9023 47.8125 25.3229 47.8125Z" fill="white"></path>
-                        <path d="M19.1817 38.6042V13.3167H34.607V16.4234H22.6135V23.829H31.8615V26.9358H22.6135V38.6042H19.1817Z" fill="white"></path>
-                    </g>
-                </svg>
+            <NavLink to="profile" className={({ isActive }) => isActive ? "profile-icon active" : "profile-icon"}>
+                <img src="/pillars_of_creation.webp" alt="Profile" />
             </NavLink>
             <div className="title-container">
                 <Link to="/" className="freeflow-title">FreeFlow</Link>
