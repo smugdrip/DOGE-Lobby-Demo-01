@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from database import *
 
 app = FastAPI()
 
@@ -10,6 +11,8 @@ app.add_middleware(
     allow_methods=["*"],  # Allows all methods (GET, POST, etc.)
     allow_headers=["*"],  # Allows all headers
 )
+
+
 
 @app.get("/")
 async def root():
@@ -22,5 +25,9 @@ async def getIdea(idea_id):
 
 @app.get("/api/users/{user_id}")
 async def getUser(user_id):
-    # TODO call to database here
-    return { "user_id" : user_id }
+    user = getUserByUsername(user_id)
+    return { user }
+
+if __name__ == "__main__":
+    setupDB()
+    populateDB()
