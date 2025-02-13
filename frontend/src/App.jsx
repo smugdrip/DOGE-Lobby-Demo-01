@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import Navbar from "./Navbar.jsx"
+import Home from "./Home.jsx"
 import Search from "./search.jsx"
 import './App.css'
 
@@ -28,6 +29,7 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />
       </Routes>
     </Router>

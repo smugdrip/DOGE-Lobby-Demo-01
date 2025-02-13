@@ -1,14 +1,15 @@
 import { Link, NavLink } from "react-router-dom";
+import "./Navbar.css"
 
 export default function Navbar() {
     return (
         <nav className="nav">
-            <Link to="/">
+            <NavLink to="/" className={({ isActive }) => isActive ? "nav-icon active" : "nav-icon"}>
                 <svg width="57" height="44" viewBox="0 0 57 44" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path id="c1508f24" d="M11.5 19.5V43.5H23.5V34H33.5V43.5H45.5V19.5L52.5 24H55L56.5 23L57 21.5L56.5 19.5L45.5 11.5V3L42 2.5L39 3V7L30.5 0.5L29.5 0H28.5H28L27 0.5L0.5 19.5L0 21.5L1 23.5L2.5 24.5L4.5 24L11.5 19.5Z" fill="white"></path>
                 </svg>
-            </Link>
-            <NavLink to="/search" className={({ isActive }) => isActive ? "search-link active" : "search-link"}>
+            </NavLink>
+            <NavLink to="/search" className={({ isActive }) => isActive ? "nav-icon active" : "nav-icon"}>
                 <svg width="45" height="45" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g id="03748b11">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M15.5 31C24.0604 31 31 24.0604 31 15.5C31 6.93959 24.0604 0 15.5 0C6.93959 0 0 6.93959 0 15.5C0 24.0604 6.93959 31 15.5 31ZM15.5 25C20.7467 25 25 20.7467 25 15.5C25 10.2533 20.7467 6 15.5 6C10.2533 6 6 10.2533 6 15.5C6 20.7467 10.2533 25 15.5 25Z" fill="white"></path>
@@ -17,7 +18,7 @@ export default function Navbar() {
                     </g>
                 </svg>
             </NavLink>
-            <Link to="/notifications">
+            <NavLink to="/notifications" className={({ isActive }) => isActive ? "nav-icon active" : "nav-icon"}>
                 <svg width="41" height="45" viewBox="0 0 41 45" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g id="fdc8c45a">
                         <path d="M1.27895 37.4016C1.27895 35.6067 2.73403 34.1516 4.52895 34.1516H36.029C37.8239 34.1516 39.279 35.6067 39.279 37.4016C39.279 39.1966 37.8239 40.6516 36.029 40.6516H4.52895C2.73403 40.6516 1.27895 39.1966 1.27895 37.4016Z" fill="white"></path>
@@ -33,11 +34,18 @@ export default function Navbar() {
                         <path d="M12 11H29V14H12V11Z" fill="white"></path>
                     </g>
                 </svg>
-            </Link>
+            </NavLink>
+            <NavLink to="profile" className={({ isActive }) => isActive ? "nav-icon active" : "nav-icon"}>
+                <svg width="51" height="51" viewBox="0 0 51 51" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g id="7acdbfef">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M25.5 51C39.5833 51 51 39.5833 51 25.5C51 11.4167 39.5833 0 25.5 0C11.4167 0 0 11.4167 0 25.5C0 39.5833 11.4167 51 25.5 51ZM25.3229 47.8125C37.7436 47.8125 47.8125 37.7436 47.8125 25.3229C47.8125 12.9023 37.7436 2.83333 25.3229 2.83333C12.9023 2.83333 2.83333 12.9023 2.83333 25.3229C2.83333 37.7436 12.9023 47.8125 25.3229 47.8125Z" fill="white"></path>
+                        <path d="M19.1817 38.6042V13.3167H34.607V16.4234H22.6135V23.829H31.8615V26.9358H22.6135V38.6042H19.1817Z" fill="white"></path>
+                    </g>
+                </svg>
+            </NavLink>
             <div className="title-container">
                 <Link to="/" className="freeflow-title">FreeFlow</Link>
             </div>
-            <ul></ul>
         </nav >
     );
 }
