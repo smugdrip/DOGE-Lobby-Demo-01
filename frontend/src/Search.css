@@ -1,0 +1,12 @@
+.search-page {
+    text-align: center;
+    margin-top: 5rem;
+}
+
+.search-input {
+    padding: 20px;
+    width: 80%;
+    font-size: 2rem;
+    border-radius: 2.5rem;
+    border: 1px solid #ccc;
+}
