@@ -1,4 +1,5 @@
 import { useTheme } from 'styled-components';
+import PropTypes from 'prop-types';
 
 const Button = ({ children, ...props }) => {
   const theme = useTheme();
@@ -21,6 +22,9 @@ const Button = ({ children, ...props }) => {
       {children}
     </button>
   );
+};
+Button.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default Button;

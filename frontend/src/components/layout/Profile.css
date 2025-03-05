@@ -1,0 +1,76 @@
+.profile-page {
+    display: flex;
+    justify-content: flex-end;
+    text-align: center;
+    margin-top: 5rem;
+}
+
+.profile-page .dropdown {
+    position: relative;
+    top: -140px;
+    right: 160px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: fit-content;
+    border-radius: 5px;
+    align-self: center;
+}
+
+.dropdown .options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: max-content;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1000;
+}
+
+.dropdown .options.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.dropdown .toggle,
+.dropdown .options button {
+    display: flex;
+    justify-content: space-between;
+    text-align: start;
+    padding: 5px 10px;
+    border: 1px solid #aaa;
+    background-color: #eee;
+    transition: background-color 0.05s ease;
+    cursor: pointer;
+}
+
+.dropdown .options button {
+    border-top: 0;
+}
+
+.dropdown .options button:hover {
+    background-color: #ddd;
+}
+
+.dropdown .options .logout {
+    color: red;
+}
+
+.dropdown .options button.selected {
+    background-color: #ddd;
+    cursor: default;
+}
+
+.dropdown .toggle:hover {
+    background-color: #ccc;
+}
+
+.dropdown .options a {
+    text-decoration: none;
+}
+
+.dropdown .options a button {
+    text-align: start;
+}

@@ -1,38 +1,36 @@
-import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import Navbar from "./Navbar.jsx"
-import Home from "./Home.jsx"
-import Search from "./search.jsx"
-import './App.css'
+import Home from "./pages/Home.jsx"
+import Search from "./pages/Search.jsx"
+import Login from "./pages/Login.jsx"
+import Notifications from "./pages/Notifications.jsx"
+import Profile from "./pages/Profile.jsx"
+import EditProfile from "./pages/EditProfile.jsx"
+import CreateAccount from "./pages/CreateAccount.jsx"
+import Blockchain from "./pages/Blockchain/Blockchain.jsx"
+// import CreateIdea from "./pages/CreateIdea.jsx"
+import { ThemeProvider } from "styled-components"
+import theme from "./styles/theme"
+import "./styles/variables.css"
 
 function App() {
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://localhost:8000')
-        const result = await response.json()
-        setData(result)
-      } catch (error) {
-        console.error('Error fetching data:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [])
-
-  return(
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/search" element={<Search />} />
-      </Routes>
-    </Router>
+  return (
+    <ThemeProvider theme={theme}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/edit-profile" element={<EditProfile />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/create-account" element={<CreateAccount />} />
+          <Route path="/blockchain" element={<Blockchain />} />
+          {/* <Route path="/create-idea" element={<CreateIdea />} /> */}
+        </Routes>
+      </Router>
+    </ThemeProvider>
   )
 
 }

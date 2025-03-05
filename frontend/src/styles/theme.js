@@ -1,4 +1,4 @@
-export const theme = {
+const theme = {
   colors: {
     primary: '#1c3144ff',    // prussian-blue
     accent: '#ffba08ff',     // selective-yellow
@@ -9,3 +9,5 @@ export const theme = {
     textOnPrimary: '#ffffff',
   },
 };
+
+export default theme;

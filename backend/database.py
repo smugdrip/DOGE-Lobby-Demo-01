@@ -1,6 +1,8 @@
 from peewee import *
 import os
 from dotenv import load_dotenv
+import bcrypt
+
 
 load_dotenv()
 
@@ -9,14 +11,13 @@ load_dotenv()
 db = MySQLDatabase('doge_lobby', user='root', password=os.getenv("SQL_PASSWORD"),
                          host='127.0.0.1', port=3306)
 
-class User(Model):
+class UserInDB(Model):
     username = CharField(primary_key=True)
     firstName = CharField()
     middleName = CharField()
     lastName = CharField()
     email = CharField()
-    pwHash = CharField()
-    salt = CharField()
+    pwHashSalt = CharField()
     phoneNumber = CharField()
     addressLine1 = CharField()
     addressLine2 = CharField()
@@ -24,6 +25,7 @@ class User(Model):
     state = CharField()
     zipCode = CharField()
     country = CharField()
+    metamaskID = CharField()
 
     class Meta:
         database = db # This model uses the "people.db" database.
@@ -32,8 +34,8 @@ class User(Model):
 
 
 class UserHasFriend(Model):
-    user1 = ForeignKeyField(User)
-    user2 = ForeignKeyField(User)
+    user1 = ForeignKeyField(UserInDB)
+    user2 = ForeignKeyField(UserInDB)
 
     class Meta:
         database = db
@@ -44,7 +46,7 @@ class Notification(Model):
     title = CharField()
     body = CharField()
     timeCreated = DateTimeField()
-    username = ForeignKeyField(User)
+    username = ForeignKeyField(UserInDB)
 
     class Meta:
         database = db
@@ -54,7 +56,7 @@ class Notification(Model):
 class Idea(Model):
     title = CharField()
     body = CharField()
-    creator = ForeignKeyField(User, backref="ideas")
+    creator = ForeignKeyField(UserInDB, backref="ideas")
     tokenCount = IntegerField()
     timeCreated = DateTimeField()
     stakePeriodEnd = DateTimeField()
@@ -65,7 +67,7 @@ class Idea(Model):
         database = db # This model uses the "people.db" database.
 
 class UserSupportsIdea(Model):
-    user = ForeignKeyField(User)
+    user = ForeignKeyField(UserInDB)
     ideaID = ForeignKeyField(Idea)
 
     class Meta:
@@ -73,7 +75,7 @@ class UserSupportsIdea(Model):
         primary_key = CompositeKey('user', 'ideaID')
 
 class UserSavesIdea(Model):
-    user = ForeignKeyField(User)
+    user = ForeignKeyField(UserInDB)
     ideaID = ForeignKeyField(Idea)
 
     class Meta:
@@ -82,7 +84,7 @@ class UserSavesIdea(Model):
 
 
 class UserQuestionsIdea(Model):
-    user = ForeignKeyField(User)
+    user = ForeignKeyField(UserInDB)
     ideaID = ForeignKeyField(Idea)
 
     class Meta:
@@ -96,7 +98,7 @@ class Comment(Model):
     hashtag = CharField()
     timeCreated = DateTimeField()
     ideaID = ForeignKeyField(Idea)
-    commentor = ForeignKeyField(User)
+    commentor = ForeignKeyField(UserInDB)
     replyingTo = ForeignKeyField('self')
 
     class Meta:
@@ -130,7 +132,7 @@ class Image(Model):
 
 def setupDB():
     db.connect()
-    db.create_tables([User, UserHasFriend, Notification, Idea, UserSupportsIdea, UserSavesIdea, UserQuestionsIdea, 
+    db.create_tables([UserInDB, UserHasFriend, Notification, Idea, UserSupportsIdea, UserSavesIdea, UserQuestionsIdea, 
                 Comment, Category, IdeaHasCategory, Image])
 
 setupDB()
@@ -138,20 +140,36 @@ setupDB()
 def populateDB():
     print("populating db")
     try:
-        alex = User.create(username="aklevans", firstName = "alex", lastName = "Klevans", email = "alex@email.com")
-        varun = User.create(username="vsiyer", firstName = "varun", lastName = "iyer", email = "varun@email.com")
+        alex = UserInDB.create(username="aklevans", firstName = "alex", lastName = "Klevans", email = "alex@email.com")
+        varun = UserInDB.create(username="vsiyer", firstName = "varun", lastName = "iyer", email = "varun@email.com")
     except:
         print("db already populated")
 populateDB()
 
 
 def getUserByUsername(username):
-    return User.select().where(User.username == username).get()
+    try:
+        return UserInDB.select().where(UserInDB.username == username).get()
+    except DoesNotExist:
+        return None
+
+
+
+
+def getUserByCredentials(username, plainTextPW):
+    u=getUserByUsername(username)
+    if not u:
+        return None
+
+    # in bcrypt salt is built into password
+    if(bcrypt.checkpw(plainTextPW.encode('utf-8'), u.pwHashSalt.encode('utf-8'))):
+        return u
+    return None
+
 
 def getUserFriends(user):
     return
 
 def addUserFriend(user1, user2):
     return
-
 
