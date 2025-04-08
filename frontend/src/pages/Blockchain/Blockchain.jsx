@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getTokenVotes, createIdea, getTotalTokenVotes, getWinningProposal, nominateComment, stakeTokens, voteOnProposal, withdrawFromTreasury, getStakedAmount } from "./BlockchainFunctions"; 
+import { getTokenVotes, createIdea, getTotalTokenVotes, getWinningProposal, nominateComment, stakeTokens, voteOnProposal, withdrawFromTreasury, getStakedAmount, getTotalStaked, getStatusVoteData, voteOnStatus, startStatusVote } from "./BlockchainFunctions"; 
 
 function Blockchain() {
   // MetaMask connection
@@ -14,6 +14,7 @@ function Blockchain() {
   // Viewing staked amount and total balance
   const [stakedAmountView, setStakedAmountView] = useState("");
   const [stakedAmountViewAdd, setStakedAmountViewAdd] = useState("");
+  const [totalStakedAmount, setTotalStakedAmount] = useState("");
 
   // Staking to an existing Idea
   const [ideaAddressToStake, setIdeaAddressToStake] = useState("");
@@ -38,6 +39,12 @@ function Blockchain() {
   const [userVotes, setUserVotes] = useState("");
   const [winningProposalID, setWinningProposalID] = useState("");
   const [winningProposalVotes, setWinningProposalVotes] = useState("");
+
+  const [statusVoteDataIdea, setStatusVoteDataIdea] = useState("");
+  const [statusVoteDataResult, setStatusVoteDataResult] = useState(null);
+  const [voteStatusIdea, setVoteStatusIdea] = useState("");
+  const [voteStatusOption, setVoteStatusOption] = useState("");
+  const [startStatusVoteIdea, setStartStatusVoteIdea] = useState("");
 
   const connectWallet = async () => {
     if (isTransacting) return;
@@ -224,13 +231,88 @@ function Blockchain() {
 
     try {
       const amount = await getStakedAmount(stakedAmountViewAdd, account);
+      const total = await getTotalStaked(stakedAmountViewAdd);
 
       setStakedAmountView(amount);
+      setTotalStakedAmount(total);
 
       setTxStatus(`Successfully got staked amount.`);
     } catch (error) {
       console.error("Error viewing:", error);
       setTxStatus("Error viewing:" + error.message);
+    } finally {
+      setIsTransacting(false);
+    }
+  };
+
+  const handleGetStatusVoteData = async () => {
+    if (isTransacting) return;
+
+    if (!statusVoteDataIdea) {
+      alert("Please enter the Idea address.");
+      return;
+    }
+
+    setIsTransacting(true);
+    setTxStatus("Retrieving status vote data...");
+
+    try {
+      const data = await getStatusVoteData(statusVoteDataIdea);
+      setStatusVoteDataResult(data);
+      setTxStatus("Status vote data retrieved successfully.");
+    } catch (error) {
+      console.error("Error in getStatusVoteData:", error);
+      setTxStatus("Error retrieving status vote data: " + error.message);
+    } finally {
+      setIsTransacting(false);
+    }
+  };
+
+  const handleVoteOnStatus = async () => {
+    if (isTransacting) return;
+
+    if (!voteStatusIdea) {
+      alert("Please enter the Idea address.");
+      return;
+    }
+    // statusOption must be a number. Typically: 0=End, 1=Cancel, 2=Extend
+    const parsedOption = parseInt(voteStatusOption, 10);
+    if (isNaN(parsedOption) || parsedOption < 0 || parsedOption > 2) {
+      alert("Invalid status option. Must be 0 (End), 1 (Cancel), or 2 (Extend).");
+      return;
+    }
+
+    setIsTransacting(true);
+    setTxStatus("Casting status vote transaction...");
+
+    try {
+      const receipt = await voteOnStatus(voteStatusIdea, parsedOption);
+      setTxStatus(`Status vote cast. Tx hash: ${receipt.transactionHash}`);
+    } catch (error) {
+      console.error("Error in voteOnStatus:", error);
+      setTxStatus("Error voting on status: " + error.message);
+    } finally {
+      setIsTransacting(false);
+    }
+  };
+
+  const handleStartStatusVote = async () => {
+    if (isTransacting) return;
+
+    if (!startStatusVoteIdea) {
+      alert("Please enter the Idea address.");
+      return;
+    }
+
+    setIsTransacting(true);
+    setTxStatus("Starting status vote transaction...");
+
+    try {
+      const receipt = await startStatusVote(startStatusVoteIdea);
+      setTxStatus(`Status vote started. Tx hash: ${receipt.transactionHash}`);
+    } catch (error) {
+      console.error("Error in startStatusVote:", error);
+      setTxStatus("Error starting status vote: " + error.message);
     } finally {
       setIsTransacting(false);
     }
@@ -351,7 +433,11 @@ function Blockchain() {
         View Amount Staked
       </button>
       {stakedAmountView && (
-        <p>Staked amount: <strong>{stakedAmountView}</strong></p>
+        <div>
+
+          <p>Your Staked Amount: <strong>{stakedAmountView}</strong></p>
+          <p>Total Staked Amount: <strong>{totalStakedAmount}</strong></p>
+        </div>
       )}
 
 
@@ -454,6 +540,72 @@ function Blockchain() {
       )}
 
       <hr />
+
+      <h2>Status Voting</h2>
+
+      <hr />
+
+      {/* 1) getStatusVoteData */}
+      <h4>Get Status Vote Data</h4>
+      <p>View the current state of the status vote.</p>
+      <div>
+        <label>Idea Contract Address</label>
+        <input
+          type="text"
+          placeholder="0x123..."
+          value={statusVoteDataIdea}
+          onChange={(e) => setStatusVoteDataIdea(e.target.value)}
+        />
+
+      </div>
+
+      <button onClick={handleGetStatusVoteData} disabled={isTransacting}>
+        Get Status Vote Data
+      </button>
+
+      {statusVoteDataResult && (
+        <div>
+          <p>End Votes: {statusVoteDataResult.endVotes}</p>
+          <p>Cancel Votes: {statusVoteDataResult.cancelVotes}</p>
+          <p>Extend Votes: {statusVoteDataResult.extendVotes}</p>
+          <p>Extension Count: {statusVoteDataResult.extensionCount}</p>
+          <p>Threshold Time: {statusVoteDataResult.thresholdTime}</p>
+        </div>
+      )}
+
+      <hr />
+
+      {/* 2) voteOnStatus */}
+      <h4>Vote on Status (0=End, 1=Cancel, 2=Extend)</h4>
+      <input
+        type="text"
+        placeholder="Idea Address"
+        value={voteStatusIdea}
+        onChange={(e) => setVoteStatusIdea(e.target.value)}
+      />
+      <input
+        type="number"
+        placeholder="Status Option"
+        value={voteStatusOption}
+        onChange={(e) => setVoteStatusOption(e.target.value)}
+      />
+      <button onClick={handleVoteOnStatus} disabled={isTransacting || !account}>
+        Cast Status Vote
+      </button>
+
+      <hr />
+
+      {/* 3) startStatusVote */}
+      <h4>Start Status Vote</h4>
+      <input
+        type="text"
+        placeholder="Idea Address"
+        value={startStatusVoteIdea}
+        onChange={(e) => setStartStatusVoteIdea(e.target.value)}
+      />
+      <button onClick={handleStartStatusVote} disabled={isTransacting || !account}>
+        Start Status Vote
+      </button>
 
     </div>
   );
