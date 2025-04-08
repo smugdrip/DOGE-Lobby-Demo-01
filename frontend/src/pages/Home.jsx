@@ -10,12 +10,6 @@ const Home = () => {
             <div>
                 <div className="home-container text-center">
                     <h1>Let's find a great idea</h1>
-                    {isLoggedIn ? (
-                        <button className="btn btn-secondary" onClick={() => {
-                            localStorage.removeItem('jwt');
-                            navigate('/login');
-                        }}>Logout</button>
-                    ) : null}
                     <button className="btn btn-primary" onClick={() => navigate('/blockchain')}>
                         Go to Blockchain
                     </button>
